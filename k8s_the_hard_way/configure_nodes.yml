@@ -1,0 +1,4 @@
+- hosts: nodes
+  sudo: yes
+  roles:
+    - k8s_workers

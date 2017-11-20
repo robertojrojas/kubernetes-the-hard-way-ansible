@@ -1,0 +1,28 @@
+lb ansible_user=ubuntu ansible_ssh_host=127.0.0.1 ansible_ssh_port=2222 ansible_ssh_private_key_file=./.vagrant/machines/lb/virtualbox/private_key
+controller1 ansible_user=ubuntu ansible_ssh_host=127.0.0.1 ansible_ssh_port=2200 ansible_ssh_private_key_file=./.vagrant/machines/controller1/virtualbox/private_key
+controller2 ansible_user=ubuntu ansible_ssh_host=127.0.0.1 ansible_ssh_port=2201 ansible_ssh_private_key_file=./.vagrant/machines/controller2/virtualbox/private_key
+worker1 ansible_user=ubuntu ansible_ssh_host=127.0.0.1 ansible_ssh_port=2202 ansible_ssh_private_key_file=./.vagrant/machines/worker1/virtualbox/private_key
+worker2 ansible_user=ubuntu ansible_ssh_host=127.0.0.1 ansible_ssh_port=2203 ansible_ssh_private_key_file=./.vagrant/machines/worker2/virtualbox/private_key
+
+[load_balancer]
+lb
+
+[main_controller]
+controller1
+
+[masters]
+controller1
+controller2
+
+[nodes]
+worker1
+worker2
+
+[k8s:children]
+load_balancer
+masters
+nodes
+
+[k8s:vars]
+ansible_user=ubuntu 
+ansible_ssh_host=127.0.0.1

@@ -1,0 +1,73 @@
+---
+# tasks file for ha_k8s_control_plane---
+
+- name: Creates /var/lib/kubernetes/ 
+  file: path=/var/lib/kubernetes/ state=directory
+
+- name: Copy .pem files to /var/lib/kubernetes/
+  command: bash -c 'cp ca.pem ca-key.pem kubernetes-key.pem kubernetes.pem  /var/lib/kubernetes/'
+  args:
+    chdir: /vagrant
+
+- name: Copy token.csv to /var/lib/kubernetes/ 
+  command: bash -c 'cp token.csv  /var/lib/kubernetes/'
+  args:
+    chdir: /vagrant
+
+- name: Download and Install kube-apiserver 
+  get_url:
+    url: https://storage.googleapis.com/kubernetes-release/release/{{ k8s_version }}/bin/linux/amd64/kube-apiserver
+    dest: /usr/bin/kube-apiserver
+    mode: 755
+
+- name: Download and Install kube-controller-manager 
+  get_url:
+    url: https://storage.googleapis.com/kubernetes-release/release/{{ k8s_version }}/bin/linux/amd64/kube-controller-manager
+    dest: /usr/bin/kube-controller-manager
+    mode: 755
+
+- name: Download and Install kube-scheduler 
+  get_url:
+    url: https://storage.googleapis.com/kubernetes-release/release/{{ k8s_version }}/bin/linux/amd64/kube-scheduler
+    dest: /usr/bin/kube-scheduler
+    mode: 755
+
+- name: Download and Install kubectl
+  get_url:
+    url: https://storage.googleapis.com/kubernetes-release/release/{{ k8s_version }}/bin/linux/amd64/kubectl
+    dest: /usr/bin/kubectl
+    mode: 755
+
+- name: Copying kube-apiserver.service
+  template: 
+    src: kube-apiserver.service 
+    dest: /etc/systemd/system/ 
+
+- name: Starts Kube API Server Service
+  systemd:
+    state: started
+    daemon_reload: yes
+    name: kube-apiserver
+
+- name: Copying kube-controller-manager.service 
+  template:
+    src: kube-controller-manager.service
+    dest: /etc/systemd/system/
+
+- name: Starts Kube Controller Manager Service
+  systemd:
+    state: started
+    daemon_reload: yes
+    name: kube-controller-manager
+
+- name: Copying kube-scheduler.service 
+  template:
+    src: kube-scheduler.service 
+    dest: /etc/systemd/system/
+
+- name: Starts Kube Scheduler Service
+  systemd:
+    state: started
+    daemon_reload: yes
+    name: kube-scheduler
+

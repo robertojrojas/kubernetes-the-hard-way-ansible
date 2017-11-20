@@ -1,0 +1,8 @@
+---
+# tasks file for install_nginx_pods
+
+- name: Deploy 3 NGINX replicas
+  command: bash -c 'kubectl run nginx --image=nginx --port=80 --replicas=3'
+
+- name: Expose NGINX deployment
+  command: bash -c 'kubectl expose deployment nginx --type NodePort'

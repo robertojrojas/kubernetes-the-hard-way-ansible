@@ -1,0 +1,10 @@
+---
+# This playbook a HA k8s v1.6.x following Kubernetes The Hard Way steps:
+# https://github.com/kelseyhightower/kubernetes-the-hard-way/tree/239f1438ae4ad56dc0f14b5d1ebff1dde4741123
+
+---
+- import_playbook: update_hosts_file.yml
+- import_playbook: configure_load_balancer.yml
+- import_playbook: configure_cluster.yml
+- import_playbook: configure_nodes.yml
+- import_playbook: approve_and_test.yml

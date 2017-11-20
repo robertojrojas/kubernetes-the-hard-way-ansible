@@ -1,0 +1,12 @@
+k8s_version: v1.6.12
+ectd_version: v3.1.4
+k8sv161_lb: k8sv161-lb
+k8sv161_c1: k8sv161-c1
+k8sv161_c2: k8sv161-c2
+k8sv161_w1: k8sv161-w1
+k8sv161_w2: k8sv161-w2
+k8sv161_lb_ip: 192.168.44.10
+k8sv161_c1_ip: 192.168.44.11
+k8sv161_c2_ip: 192.168.44.12
+k8sv161_w1_ip: 192.168.44.21
+k8sv161_w2_ip: 192.168.44.22

@@ -1,0 +1,5 @@
+- hosts: main_controller
+  sudo: yes
+  roles:
+    - approve_tls_certificate_requests
+    - install_nginx_pods

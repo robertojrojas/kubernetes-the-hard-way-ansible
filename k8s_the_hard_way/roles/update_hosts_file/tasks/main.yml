@@ -1,0 +1,11 @@
+---
+# tasks file for update_hosts_file
+
+- name: "Build hosts file"
+  lineinfile: dest=/etc/hosts regexp='.*{{ item.host }}$' line="{{ item.ip }} {{item.host}}" state=present
+  with_items: 
+    - { host: 'k8sv161-lb', ip: '192.168.44.10' }
+    - { host: 'k8sv161-c1', ip: '192.168.44.11' }
+    - { host: 'k8sv161-c2', ip: '192.168.44.12' }
+    - { host: 'k8sv161-w1', ip: '192.168.44.21' }
+    - { host: 'k8sv161-w2', ip: '192.168.44.22' }

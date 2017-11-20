@@ -1,0 +1,63 @@
+---
+# tasks file for tls_client_rbac_auth
+
+- name: Download and Install kubectl
+  get_url:
+    url: https://storage.googleapis.com/kubernetes-release/release/{{ k8s_version }}/bin/linux/amd64/kubectl
+    dest: /usr/bin/kubectl
+    mode: 755
+
+- name: Create the TLS Bootstrap Token
+  command: bash -c "head -c 16 /dev/urandom | od -An -t x | tr -d ' '"
+  register: command_output 
+
+- set_fact:
+   bootstrap_token: "{{ command_output.stdout }}"
+
+- name: Copying token.csv token file
+  template: 
+    src: token.csv 
+    dest: /vagrant
+
+- name: Set cluster into bootstrap.kubeconfig 
+  command: bash -c 'kubectl config set-cluster kubernetes-the-hard-way --certificate-authority=/vagrant/ca.pem --embed-certs=true --server=https://{{ k8sv161_lb_ip }}:6443 --kubeconfig=/vagrant/bootstrap.kubeconfig'
+  args:
+    chdir: /vagrant
+    creates: /vagrant/bootstrap.kubeconfig
+
+- name: Set credentials into bootstrap.kubeconfig 
+  command: bash -c 'kubectl config set-credentials kubelet-bootstrap --token={{ bootstrap_token }} --kubeconfig=bootstrap.kubeconfig'
+  args:
+    chdir: /vagrant
+
+- name: Set context into bootstrap.kubeconfig 
+  command: bash -c 'kubectl config set-context default --cluster=kubernetes-the-hard-way --user=kubelet-bootstrap --kubeconfig=bootstrap.kubeconfig'
+  args:
+    chdir: /vagrant
+
+- name: Set use-context into bootstrap.kubeconfig 
+  command: bash -c 'kubectl config use-context default --kubeconfig=bootstrap.kubeconfig'
+  args:
+    chdir: /vagrant
+
+
+- name: Set cluster into kube-proxy.kubeconfig 
+  command: bash -c 'kubectl config set-cluster kubernetes-the-hard-way --certificate-authority=ca.pem --embed-certs=true --server=https://{{ k8sv161_lb_ip }}:6443 --kubeconfig=kube-proxy.kubeconfig'
+  args:
+    chdir: /vagrant
+    creates: /vagrant/kube-proxy.kubeconfig
+
+- name: Set credentials into kube-proxy.kubeconfig 
+  command: bash -c 'kubectl config set-credentials kube-proxy --client-certificate=kube-proxy.pem --client-key=kube-proxy-key.pem --embed-certs=true --kubeconfig=kube-proxy.kubeconfig'
+  args:
+    chdir: /vagrant
+
+- name: Set context into kube-proxy.kubeconfig 
+  command: bash -c 'kubectl config set-context default --cluster=kubernetes-the-hard-way --user=kube-proxy --kubeconfig=kube-proxy.kubeconfig'
+  args:
+    chdir: /vagrant
+
+- name: Set use-context into kube-proxy.kubeconfig
+  command: bash -c 'kubectl config use-context default --kubeconfig=kube-proxy.kubeconfig'
+  args:
+    chdir: /vagrant

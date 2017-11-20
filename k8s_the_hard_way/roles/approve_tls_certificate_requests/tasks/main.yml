@@ -1,0 +1,10 @@
+---
+# tasks file for approve_tls_certificate_requests
+
+- name: List the pending certificate requests
+  command: bash -c "kubectl get csr | grep Pending | awk '{ print $1}'"
+  register: pending_requests
+
+- name: Approve each certificate signing request using the kubectl certificate approve command
+  command: bash -c 'kubectl certificate approve {{item}}'
+  with_items: pending_requests.stdout 

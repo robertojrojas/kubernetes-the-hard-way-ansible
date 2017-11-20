@@ -1,0 +1,32 @@
+{
+  "CN": "kubernetes",
+  "hosts": [
+    "10.32.0.1",
+    "192.168.44.10",
+    "192.168.44.11",
+    "192.168.44.12",
+    "192.168.44.21",
+    "192.168.44.22",
+    "k8sv161-lb",
+    "k8sv161-c1",
+    "k8sv161-c2",
+    "k8sv161-w1",
+    "k8sv161-w2",
+    "",
+    "127.0.0.1",
+    "kubernetes.default"
+  ],
+  "key": {
+    "algo": "rsa",
+    "size": 2048
+  },
+  "names": [
+    {
+      "C": "US",
+      "L": "Reading",
+      "O": "Kubernetes",
+      "OU": "Cluster",
+      "ST": "Pennsylvania"
+    }
+  ]
+}

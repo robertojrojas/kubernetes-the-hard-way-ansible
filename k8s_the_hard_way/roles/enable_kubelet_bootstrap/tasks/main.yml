@@ -1,0 +1,5 @@
+---
+# tasks file for enable_kubelet_bootstrap
+
+- name: Enable TLS bootstrapping by binding the kubelet-bootstrap user to the system:node-bootstrapper cluster role
+  command: bash -c 'kubectl create clusterrolebinding kubelet-bootstrap --clusterrole=system:node-bootstrapper --user=kubelet-bootstrap'

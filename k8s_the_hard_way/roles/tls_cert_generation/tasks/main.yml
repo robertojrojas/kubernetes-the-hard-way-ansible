@@ -1,0 +1,69 @@
+---
+# tasks file for tls_cert_generation
+
+- name: Download CFSSL tool
+  get_url:
+    url: https://pkg.cfssl.org/R1.2/cfssl_linux-amd64
+    dest: /usr/bin/cfssl
+    mode: 755
+
+- name: Download CFSSL JSON tool
+  get_url:
+    url: https://pkg.cfssl.org/R1.2/cfssljson_linux-amd64 
+    dest: /usr/bin/cfssljson
+    mode: 755
+
+- name: Copy CA configuration file
+  copy: 
+    src: ca-config.json 
+    dest: /tmp/ 
+    mode: 0755
+
+- name: Copy CA certificate signing request 
+  copy: 
+    src: ca-csr.json 
+    dest: /tmp/ 
+    mode: 0755
+
+- name: Generate a CA certificate and private key 
+  command: bash -c 'cfssl gencert -initca /tmp/ca-csr.json | cfssljson -bare ca '
+  args:
+    chdir: /vagrant
+    creates: /vagrant/ca-key.pem 
+
+- name: Copy the admin client certificate signing request 
+  copy: 
+    src: admin-csr.json 
+    dest: /tmp/ 
+    mode: 0755
+
+- name: Generate the admin client certificate and private key 
+  command: bash -c 'cfssl gencert -ca=/vagrant/ca.pem -ca-key=/vagrant/ca-key.pem -config=/tmp/ca-config.json -profile=kubernetes /tmp/admin-csr.json | cfssljson -bare admin'
+  args:
+    chdir: /vagrant
+    creates: /vagrant/admin-key.pem 
+
+- name: Copy the kube-proxy client certificate signing request 
+  copy: 
+    src: kube-proxy-csr.json 
+    dest: /tmp/ 
+    mode: 0755
+
+- name: Generate the kube-proxy client certificate and private key 
+  command: bash -c 'cfssl gencert -ca=/vagrant/ca.pem -ca-key=/vagrant/ca-key.pem -config=/tmp/ca-config.json -profile=kubernetes /tmp/kube-proxy-csr.json | cfssljson -bare kube-proxy'
+  args:
+    chdir: /vagrant
+    creates: /vagrant/kube-proxy-key.pem 
+
+- name: Copy the Kubernetes server certificate signing request 
+  copy: 
+    src: kubernetes-csr.json 
+    dest: /tmp/ 
+    mode: 0755
+
+- name: Generate the Kubernetes certificate and private key 
+  command: bash -c 'cfssl gencert -ca=/vagrant/ca.pem -ca-key=/vagrant/ca-key.pem -config=/tmp/ca-config.json -profile=kubernetes /tmp/kubernetes-csr.json | cfssljson -bare kubernetes'
+  args:
+    chdir: /vagrant
+    creates: /vagrant/kubernetes-key.pem 
+

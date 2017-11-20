@@ -1,0 +1,22 @@
+---
+# tasks file for deploy_cluster_dns
+
+- name: Enable TLS bootstrapping by binding the kubelet-bootstrap user to the system:node-bootstrapper cluster role
+  command: bash -c 'kubectl create clusterrolebinding serviceaccounts-cluster-admin  --clusterrole=cluster-admin --group=system:serviceaccounts'
+ 
+- name: Copy kubedns-deployment.yaml and kubedns-service.yaml to /tmp
+  copy: 
+    src: "{{item}}"
+    dest: /tmp/ 
+    mode: 0755
+  with_items:
+    - kubedns-deployment.yaml
+    - kubedns-service.yaml
+
+- name: Deploy kubedns 
+  command: bash -c 'kubectl create -f {{item}}'
+  args:
+   chdir: /tmp
+  with_items:
+    - kubedns-deployment.yaml
+    - kubedns-service.yaml

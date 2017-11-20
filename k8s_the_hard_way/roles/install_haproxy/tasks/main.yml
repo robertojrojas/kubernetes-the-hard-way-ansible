@@ -1,0 +1,28 @@
+---
+# tasks file for install_haproxy
+
+- name: install the latest version of haproxy
+  package:
+    name: haproxy
+    state: latest
+
+- name: Configure HAProxy as the Load Balancer for K8s cluster
+  blockinfile:
+    path: /etc/haproxy/haproxy.cfg
+    block: |
+       frontend https_k8s
+          bind *:6443
+          mode tcp
+          default_backend bk_k8s
+
+       backend bk_k8s
+          mode tcp
+          balance roundrobin
+          server k8sc1 {{ k8sv161_c1_ip }}
+          server k8sc2 {{ k8sv161_c2_ip }}
+
+- name: Restarts HAProxy Service
+  systemd:
+    state: restarted
+    daemon_reload: yes
+    name: haproxy
