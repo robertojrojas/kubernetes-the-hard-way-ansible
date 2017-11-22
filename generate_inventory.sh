@@ -9,7 +9,7 @@ do
   echo  $(vagrant ssh-config ${K8S_VM} | awk 'NR>1 {print " -o "$1"="$2}') | awk '{print $2 " "  $6 " " $14}' | sed 's/HostName/ansible_ssh_host/; s/Port/ansible_ssh_port/; s/IdentityFile/ansible_ssh_private_key_file/' | xargs echo ${K8S_VM} ansible_user=ubuntu >> k8s_vms_inventory 
 done
 
-cat >>k8s_vms_inventory<EOF
+cat >>k8s_vms_inventory<<EOF
 
 [load_balancer]
 lb
