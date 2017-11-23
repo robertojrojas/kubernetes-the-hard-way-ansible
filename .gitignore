@@ -10,6 +10,7 @@ token*
 *.kubeconfig
 *.retry
 .vagrant
+*.log
 
 # Test binary, build with `go test -c`
 *.test
