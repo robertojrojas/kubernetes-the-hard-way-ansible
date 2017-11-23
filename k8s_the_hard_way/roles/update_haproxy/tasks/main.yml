@@ -4,7 +4,8 @@
 - name: Configure HAProxy to Add KUARD
   blockinfile:
     path: /etc/haproxy/haproxy.cfg
-    block: |
+    insertafter: "EOF"
+    content: |
        frontend https_kuard
           bind *:{{ kuard_port }}
           mode tcp
@@ -13,8 +14,8 @@
        backend bk_kuard
           mode tcp
           balance roundrobin
-          server k8sc1 {{ k8sv161_c1_ip }}
-          server k8sc2 {{ k8sv161_c2_ip }}
+          server kuardw1 {{ k8sv161_w1_ip }}
+          server kuardw2 {{ k8sv161_w2_ip }}
 
 - name: Restarts HAProxy Service
   systemd:
