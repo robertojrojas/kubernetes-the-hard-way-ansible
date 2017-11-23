@@ -9,8 +9,8 @@
 - name: Configure HAProxy as the Load Balancer for K8s cluster
   blockinfile:
     path: /etc/haproxy/haproxy.cfg
-    insertafter: "EOF"
-    content: |
+    marker: "# BEGIN Adding Master IP addresses"
+    block: |
        frontend https_k8s
           bind *:6443
           mode tcp

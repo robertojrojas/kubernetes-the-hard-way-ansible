@@ -4,7 +4,8 @@
 - name: Configure HAProxy to Add KUARD
   blockinfile:
     path: /etc/haproxy/haproxy.cfg
-    insertafter: "EOF"
+    marker: "# BEGIN Adding Node IP addresses"
+    insertafter: "# END Adding Master IP addresses"
     content: |
        frontend https_kuard
           bind *:{{ kuard_port }}
