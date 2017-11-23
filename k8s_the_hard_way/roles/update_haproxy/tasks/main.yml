@@ -1,6 +1,9 @@
 ---
 # tasks file for update_haproxy
 
+- fail: msg="Bailing out. this play requires 'kuard_port'"
+  when: kuard_port is undefined
+
 - name: Configure HAProxy to Add KUARD
   blockinfile:
     path: /etc/haproxy/haproxy.cfg
