@@ -1,0 +1,5 @@
+---
+# defaults file for update_haproxy
+
+### This value needs to be passed from the command line
+kuard_port: 31712

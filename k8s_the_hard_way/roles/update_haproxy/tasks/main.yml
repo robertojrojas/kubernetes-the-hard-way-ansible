@@ -1,0 +1,23 @@
+---
+# tasks file for update_haproxy
+
+- name: Configure HAProxy to Add KUARD
+  blockinfile:
+    path: /etc/haproxy/haproxy.cfg
+    block: |
+       frontend https_kuard
+          bind *:{{ kuard_port }}
+          mode tcp
+          default_backend bk_kuard
+
+       backend bk_kuard
+          mode tcp
+          balance roundrobin
+          server k8sc1 {{ k8sv161_c1_ip }}
+          server k8sc2 {{ k8sv161_c2_ip }}
+
+- name: Restarts HAProxy Service
+  systemd:
+    state: restarted
+    daemon_reload: yes
+    name: haproxy

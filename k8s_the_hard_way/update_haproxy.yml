@@ -1,0 +1,4 @@
+- hosts: load_balancer
+  sudo: yes
+  roles:
+    - update_haproxy
