@@ -9,7 +9,8 @@
 - name: Configure HAProxy as the Load Balancer for K8s cluster
   blockinfile:
     path: /etc/haproxy/haproxy.cfg
-    block: |
+    insertafter: "EOF"
+    content: |
        frontend https_k8s
           bind *:6443
           mode tcp
