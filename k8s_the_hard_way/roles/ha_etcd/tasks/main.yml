@@ -13,10 +13,10 @@
 - name: Move ETCD executables to /usr/bin
   command: bash -c 'mv /tmp/etcd-{{ ectd_version }}-linux-amd64/etcd* /usr/bin'
 
-- name: Creates /etc/etcd 
+- name: Creates /etc/etcd
   file: path=/etc/etcd state=directory
 
-- name: Creates /var/lib/etcd 
+- name: Creates /var/lib/etcd
   file: path=/var/lib/etcd state=directory
 
 - name: Copy .pem files to /etc/etcd
@@ -25,12 +25,13 @@
     chdir: /vagrant
 
 - name: Copying ETCD service file
-  template: 
-    src: etcd.service 
+  template:
+    src: etcd.service
     dest: /etc/systemd/system/
 
 - name: Starts ETCD Service
   systemd:
     state: started
     daemon_reload: yes
+    enabled: yes
     name: etcd

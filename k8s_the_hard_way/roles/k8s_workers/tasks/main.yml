@@ -50,6 +50,7 @@
   systemd:
     state: started
     daemon_reload: yes
+    enabled: yes
     name: docker
 
 - name: Download and Install kube-proxy
@@ -94,6 +95,7 @@
   systemd:
     state: started
     daemon_reload: yes
+    enabled: yes
     name: "{{item}}"
   with_items:
     - kubelet
