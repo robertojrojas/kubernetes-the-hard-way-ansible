@@ -7,4 +7,5 @@
 
 - name: Approve each certificate signing request using the kubectl certificate approve command
   command: bash -c 'kubectl certificate approve {{item}}'
-  with_items: pending_requests.stdout 
+  with_items:
+    - "{{ pending_requests.stdout_lines }}"

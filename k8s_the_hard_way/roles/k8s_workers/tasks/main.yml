@@ -1,17 +1,17 @@
 ---
 # tasks file for k8s_workers--n
 
-- name: Creates /var/run/kubernetes 
+- name: Creates /var/run/kubernetes
   file: path=/var/run/{{item}} state=directory
   with_items:
-          - kubernetes  
+          - kubernetes
 
-- name: Creates /var/lib/{kubelet,kube-proxy,kubernetes} 
+- name: Creates /var/lib/{kubelet,kube-proxy,kubernetes}
   file: path=/var/lib/{{item}} state=directory
   with_items:
           - kubelet
           - kube-proxy
-          - kubernetes  
+          - kubernetes
 
 - name: Copy kubeconfig files to /var/lib/kubelet
   command: bash -c 'cp {{item}}  /var/lib/kubelet'
@@ -19,6 +19,8 @@
     chdir: /vagrant
   with_items:
     - bootstrap.kubeconfig
+    - kubernetes.pem
+    - kubernetes-key.pem
 
 - name: Copy kubeconfig files to /var/lib/kube-proxy
   command: bash -c 'cp {{item}}  /var/lib/kube-proxy'
@@ -29,7 +31,7 @@
 
 - name: Download ETCD
   get_url:
-    url: https://get.docker.com/builds/Linux/x86_64/docker-1.12.6.tgz 
+    url: https://get.docker.com/builds/Linux/x86_64/docker-1.12.6.tgz
     dest: /tmp
 
 - name: Extract and Install Docker
@@ -40,8 +42,8 @@
   command: bash -c 'cp /tmp/docker/* /usr/bin/'
 
 - name: Copying Docker service file
-  template: 
-    src: docker.service 
+  template:
+    src: docker.service
     dest: /etc/systemd/system/
 
 - name: Starts Docker Service
@@ -50,13 +52,13 @@
     daemon_reload: yes
     name: docker
 
-- name: Download and Install kube-proxy 
+- name: Download and Install kube-proxy
   get_url:
     url: https://storage.googleapis.com/kubernetes-release/release/{{ k8s_version }}/bin/linux/amd64/kube-proxy
     dest: /usr/bin/kube-proxy
     mode: 755
 
-- name: Download and Install kubelet 
+- name: Download and Install kubelet
   get_url:
     url: https://storage.googleapis.com/kubernetes-release/release/{{ k8s_version }}/bin/linux/amd64/kubelet
     dest: /usr/bin/kubelet
@@ -68,7 +70,7 @@
     dest: /usr/bin/kubectl
     mode: 755
 
-- name: Creates CNI /opt/cni  
+- name: Creates CNI /opt/cni
   file: path=/opt/cni state=directory
 
 - name: Download CNI plugins
@@ -80,7 +82,7 @@
   unarchive: src=/tmp/cni-amd64-0799f5732f2a11b329d9e3d51b9c8f2e3759f2ff.tar.gz dest=/opt/cni copy=no
   mode: 755
 
-- name: Copying kubelet and kube-proxy Services to systemd 
+- name: Copying kubelet and kube-proxy Services to systemd
   template:
     src: "{{item}}.service"
     dest: /etc/systemd/system/
@@ -92,7 +94,7 @@
   systemd:
     state: started
     daemon_reload: yes
-    name: "{{item}}" 
+    name: "{{item}}"
   with_items:
     - kubelet
     - kube-proxy

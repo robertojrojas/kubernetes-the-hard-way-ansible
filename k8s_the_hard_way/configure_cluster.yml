@@ -14,5 +14,4 @@
   sudo: yes
   roles:
     - enable_kubelet_bootstrap
-    - install_pod_network
     - deploy_cluster_dns

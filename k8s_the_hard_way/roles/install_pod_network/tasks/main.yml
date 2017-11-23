@@ -1,23 +1,23 @@
 ---
 # tasks file for install_pod_network
 
-- name: Generate Calico Secret 
+- name: Generate Calico Secret
   command: bash -c 'kubectl create secret generic calico-etcd-secrets --from-file=etcd-ca=/vagrant/ca.pem --from-file=etcd-cert=/vagrant/kubernetes.pem  --from-file=etcd-key=/vagrant/kubernetes-key.pem --dry-run -o yaml > calico-secrets.yaml'
   args:
     chdir: /tmp/
 
 - name: Deploy Calico Secret
-  command: bash -c 'kubectl apply -n kube-system -f calico-secrets.yaml'
+  command: bash -c 'kubectl create -n kube-system -f calico-secrets.yaml'
   args:
     chdir: /tmp/
 
 - name: Configure Calico YAML file
-  template: 
-    src: calico.yaml 
+  template:
+    src: calico.yaml
     dest: /tmp/
 
 - name: Install Calico CNI Pod Network Provider
-  command: bash -c 'kubectl apply -n kube-system -f calico.yaml'
+  command: bash -c 'kubectl create -n kube-system -f calico.yaml'
   args:
     chdir: /tmp/
-  
+
