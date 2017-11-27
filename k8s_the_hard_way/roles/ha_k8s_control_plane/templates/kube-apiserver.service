@@ -20,6 +20,7 @@ ExecStart=/usr/bin/kube-apiserver \
   --etcd-certfile=/var/lib/kubernetes/kubernetes.pem \
   --etcd-keyfile=/var/lib/kubernetes/kubernetes-key.pem \
   --etcd-servers=https://{{ k8sv161_c1_ip }}:2379,https://{{ k8sv161_c1_ip }}:2379 \
+  --storage-backend=etcd2 \
   --event-ttl=1h \
   --experimental-bootstrap-token-auth \
   --insecure-bind-address=0.0.0.0 \
