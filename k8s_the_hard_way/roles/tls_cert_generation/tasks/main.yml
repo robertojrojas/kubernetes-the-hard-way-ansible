@@ -49,6 +49,12 @@
     dest: /tmp/ 
     mode: 0755
 
+- name: Generate Worker Certificates
+  include_tasks: generate_worker_certificate.yml
+  loop:
+     - "{{ k8sv161_w1 }}"
+     - "{{ k8sv161_w2 }}"
+
 - name: Generate the kube-proxy client certificate and private key 
   command: bash -c 'cfssl gencert -ca=/vagrant/ca.pem -ca-key=/vagrant/ca-key.pem -config=/tmp/ca-config.json -profile=kubernetes /tmp/kube-proxy-csr.json | cfssljson -bare kube-proxy'
   args:

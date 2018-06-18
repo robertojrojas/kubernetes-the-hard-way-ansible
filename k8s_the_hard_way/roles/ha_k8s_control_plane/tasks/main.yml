@@ -9,8 +9,8 @@
   args:
     chdir: /vagrant
 
-- name: Copy token.csv to /var/lib/kubernetes/
-  command: bash -c 'cp token.csv  /var/lib/kubernetes/'
+- name: Copy encryption-config.yaml to /var/lib/kubernetes/
+  command: bash -c 'cp encryption-config.yaml  /var/lib/kubernetes/'
   args:
     chdir: /vagrant
 
@@ -73,3 +73,7 @@
     daemon_reload: yes
     enabled: yes
     name: kube-scheduler
+
+# Pause for 30 seconds to let K8S Control Plane start.
+- pause:
+    seconds: 30

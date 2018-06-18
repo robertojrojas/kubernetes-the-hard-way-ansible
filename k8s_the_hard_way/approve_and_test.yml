@@ -1,5 +1,5 @@
 - hosts: main_controller
-  sudo: yes
+  become: yes
   roles:
     - install_pod_network
     - approve_tls_certificate_requests

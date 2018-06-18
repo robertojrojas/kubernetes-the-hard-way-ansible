@@ -4,14 +4,13 @@
 *.so
 *.dylib
 
-*.pem
-*.csr
-token*
-*.kubeconfig
+.vm_data/*.pem
+.vm_data/*.csr
+.vm_data/token*
+.vm_data/*.kubeconfig
 *.retry
 .vagrant
 *.log
-
 # Test binary, build with `go test -c`
 *.test
 

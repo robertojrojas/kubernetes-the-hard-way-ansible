@@ -1,4 +1,4 @@
 - hosts: load_balancer
-  sudo: yes
+  become: yes
   roles:
     - update_haproxy

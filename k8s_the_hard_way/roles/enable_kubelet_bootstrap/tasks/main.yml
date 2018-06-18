@@ -1,5 +1,20 @@
 ---
 # tasks file for enable_kubelet_bootstrap
 
-- name: Enable TLS bootstrapping by binding the kubelet-bootstrap user to the system:node-bootstrapper cluster role
-  command: bash -c 'kubectl create clusterrolebinding kubelet-bootstrap --clusterrole=system:node-bootstrapper --user=kubelet-bootstrap'
+- name: Copying ClusterRole file
+  copy:
+    src: kube_apiserver_to_kubelet_ClusterRole.yml
+    dest: /tmp
+    mode: 0755
+
+- name: Create the system:kube-apiserver-to-kubelet ClusterRole 
+  command: bash -c 'kubectl apply -f /tmp/kube_apiserver_to_kubelet_ClusterRole.yml'
+
+- name: Copying ClusterRoleBinding file
+  copy:
+    src: kube_apiserver_to_kubelet_ClusterRoleBinding.yml
+    dest: /tmp
+    mode: 0755
+
+- name: Create the system:kube-apiserver-to-kubelet ClusterRoleBinding 
+  command: bash -c 'kubectl apply -f /tmp/kube_apiserver_to_kubelet_ClusterRoleBinding.yml'

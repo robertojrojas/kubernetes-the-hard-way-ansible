@@ -1,17 +1,16 @@
 - hosts: main_controller
-  sudo: yes
+  become: yes
   roles:
     - tls_cert_generation
     - tls_client_rbac_auth
 
 - hosts: masters
-  sudo: yes
+  become: yes
   roles:
     - ha_etcd
     - ha_k8s_control_plane
 
 - hosts: main_controller
-  sudo: yes
+  become: yes
   roles:
     - enable_kubelet_bootstrap
-    - deploy_cluster_dns

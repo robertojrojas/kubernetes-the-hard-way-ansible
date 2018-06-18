@@ -1,5 +1,5 @@
 - hosts: load_balancer
-  sudo: yes
+  become: yes
   roles:
     - install_haproxy
 
