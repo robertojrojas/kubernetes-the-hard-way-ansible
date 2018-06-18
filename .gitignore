@@ -8,6 +8,7 @@
 .vm_data/*.csr
 .vm_data/token*
 .vm_data/*.kubeconfig
+.vm_data/encryption-config.yaml
 *.retry
 .vagrant
 *.log
