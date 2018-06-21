@@ -43,23 +43,48 @@
     chdir: /vagrant
     creates: /vagrant/admin-key.pem 
 
-- name: Copy the kube-proxy client certificate signing request 
-  copy: 
-    src: kube-proxy-csr.json 
-    dest: /tmp/ 
-    mode: 0755
-
 - name: Generate Worker Certificates
   include_tasks: generate_worker_certificate.yml
   loop:
      - "{{ k8sv161_w1 }}"
      - "{{ k8sv161_w2 }}"
 
+- name: Copy the kube-controller-manager client certificate signing request 
+  copy: 
+    src: kube-controller-manager-csr.json
+    dest: /tmp/ 
+    mode: 0755
+
+- name: Generate the kube-controller-manager client certificate and private key 
+  command: bash -c 'cfssl gencert -ca=/vagrant/ca.pem -ca-key=/vagrant/ca-key.pem -config=/tmp/ca-config.json -profile=kubernetes /tmp/kube-controller-manager-csr.json | cfssljson -bare kube-controller-manager'
+  args:
+    chdir: /vagrant
+    creates: /vagrant/kube-controller-manager.pem 
+
+
+- name: Copy the kube-proxy client certificate signing request 
+  copy: 
+    src: kube-proxy-csr.json 
+    dest: /tmp/ 
+    mode: 0755
+
 - name: Generate the kube-proxy client certificate and private key 
   command: bash -c 'cfssl gencert -ca=/vagrant/ca.pem -ca-key=/vagrant/ca-key.pem -config=/tmp/ca-config.json -profile=kubernetes /tmp/kube-proxy-csr.json | cfssljson -bare kube-proxy'
   args:
     chdir: /vagrant
     creates: /vagrant/kube-proxy-key.pem 
+
+- name: Copy the kube-scheduler client certificate signing request 
+  copy: 
+    src: kube-scheduler-csr.json 
+    dest: /tmp/ 
+    mode: 0755
+
+- name: Generate the kube-scheduler client certificate and private key 
+  command: bash -c 'cfssl gencert -ca=/vagrant/ca.pem -ca-key=/vagrant/ca-key.pem -config=/tmp/ca-config.json -profile=kubernetes /tmp/kube-scheduler-csr.json | cfssljson -bare kube-scheduler'
+  args:
+    chdir: /vagrant
+    creates: /vagrant/kube-scheduler-key.pem 
 
 - name: Copy the Kubernetes server certificate signing request 
   copy: 

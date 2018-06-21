@@ -30,7 +30,7 @@ Vagrant.configure("2") do |config|
    ######## CONTROLLERS #########
 
    config.vm.define "lb" do |lb|
-        lb.vm.box = "bento/ubuntu-16.04"
+        lb.vm.box = "bento/ubuntu-18.04"
         lb.vm.hostname = "k8sv19-lb"
         lb.vm.network "private_network", ip: "192.168.44.10"
         lb.vm.network "forwarded_port", guest: 8080, host: 18080
@@ -45,7 +45,7 @@ Vagrant.configure("2") do |config|
     end
 
    config.vm.define "controller1" do |controller1|
-        controller1.vm.box = "bento/ubuntu-16.04"
+        controller1.vm.box = "bento/ubuntu-18.04"
         controller1.vm.hostname = "k8sv19-c1"
         controller1.vm.network "private_network", ip: "192.168.44.11"
         controller1.vm.provision "shell", inline: $install_python_script
@@ -58,7 +58,7 @@ Vagrant.configure("2") do |config|
    end
 
    config.vm.define "controller2" do |controller2|
-        controller2.vm.box = "bento/ubuntu-16.04"
+        controller2.vm.box = "bento/ubuntu-18.04"
         controller2.vm.hostname = "k8sv19-c2"
         controller2.vm.network "private_network", ip: "192.168.44.12"
         controller2.vm.provision "shell", inline: $install_python_script
@@ -74,7 +74,7 @@ Vagrant.configure("2") do |config|
    ######## WORKERS #########
 
    config.vm.define "worker1" do |worker1|
-     worker1.vm.box = "bento/ubuntu-16.04"
+     worker1.vm.box = "bento/ubuntu-18.04"
      worker1.vm.hostname = "k8sv19-w1"
      worker1.vm.network "private_network", ip: "192.168.44.21"
      worker1.vm.provision "shell", inline: $install_python_script
@@ -89,7 +89,7 @@ Vagrant.configure("2") do |config|
    end
 
    config.vm.define "worker2" do |worker2|
-     worker2.vm.box = "bento/ubuntu-16.04"
+     worker2.vm.box = "bento/ubuntu-18.04"
      worker2.vm.hostname = "k8sv19-w2"
      worker2.vm.network "private_network", ip: "192.168.44.22"
      worker2.vm.provision "shell", inline: $install_python_script

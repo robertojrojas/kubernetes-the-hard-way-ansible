@@ -1,21 +1,5 @@
 {
   "CN": "kubernetes",
-  "hosts": [
-    "10.32.0.1",
-    "192.168.44.10",
-    "192.168.44.11",
-    "192.168.44.12",
-    "192.168.44.21",
-    "192.168.44.22",
-    "k8sv19-lb",
-    "k8sv19-c1",
-    "k8sv19-c2",
-    "k8sv19-w1",
-    "k8sv19-w2",
-    "",
-    "127.0.0.1",
-    "kubernetes.default"
-  ],
   "key": {
     "algo": "rsa",
     "size": 2048
@@ -25,7 +9,7 @@
       "C": "US",
       "L": "Reading",
       "O": "Kubernetes",
-      "OU": "Cluster",
+      "OU": "Kubernetes The Hard Way",
       "ST": "Pennsylvania"
     }
   ]

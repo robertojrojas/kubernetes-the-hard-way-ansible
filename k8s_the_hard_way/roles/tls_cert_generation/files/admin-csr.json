@@ -10,7 +10,7 @@
       "C": "US",
       "L": "Reading",
       "O": "system:masters",
-      "OU": "Cluster",
+      "OU": "Kubernetes The Hard Way",
       "ST": "Pennsylvania"
     }
   ]

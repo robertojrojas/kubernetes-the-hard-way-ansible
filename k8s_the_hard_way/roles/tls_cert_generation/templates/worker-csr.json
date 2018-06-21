@@ -8,8 +8,8 @@
     {
       "C": "US",
       "L": "Reading",
-      "O": "Kubernetes",
-      "OU": "PA",
+      "O": "system:nodes",
+      "OU": "Kubernetes The Hard Way",
       "ST": "Pennsylvania"
     }
   ]

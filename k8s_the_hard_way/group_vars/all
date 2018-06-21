@@ -1,4 +1,4 @@
-k8s_version: v1.9.0
+k8s_version: v1.10.2
 ectd_version: v3.3.8
 k8sv161_lb: k8sv19-lb
 k8sv161_c1: k8sv19-c1
