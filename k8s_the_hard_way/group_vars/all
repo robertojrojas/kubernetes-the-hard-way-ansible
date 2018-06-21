@@ -1,10 +1,13 @@
-k8s_version: v1.9.8
+k8s_version: v1.9.0
 ectd_version: v3.3.8
 k8sv161_lb: k8sv19-lb
 k8sv161_c1: k8sv19-c1
 k8sv161_c2: k8sv19-c2
 k8sv161_w1: k8sv19-w1
 k8sv161_w2: k8sv19-w2
+cidr_blocks:
+  k8sv19-w1_pod_cidr: 10.200.1.0/24
+  k8sv19-w2_pod_cidr: 10.200.2.0/24
 k8sv161_lb_ip: 192.168.44.10
 k8sv161_c1_ip: 192.168.44.11
 k8sv161_c2_ip: 192.168.44.12

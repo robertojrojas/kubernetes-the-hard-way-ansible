@@ -24,6 +24,7 @@
 
 - name: Enable SELinux HAProxy
   command: bash -c "setsebool -P haproxy_connect_any=1"
+  when: ansible_distribution == "CentOS" 
 
 - name: Restarts HAProxy Service
   systemd:

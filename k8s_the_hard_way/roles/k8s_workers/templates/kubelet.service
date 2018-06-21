@@ -1,24 +1,28 @@
 [Unit]
 Description=Kubernetes Kubelet
-Documentation=https://github.com/GoogleCloudPlatform/kubernetes
-After=docker.service
-Requires=docker.service
+Documentation=https://github.com/kubernetes/kubernetes
+After=containerd.service
+Requires=containerd.service
 
 [Service]
 ExecStart=/usr/bin/kubelet \
-  --api-servers=https://{{ k8sv161_lb_ip }}:6443 \
   --allow-privileged=true \
+  --anonymous-auth=false \
+  --authorization-mode=Webhook \
+  --client-ca-file=/var/lib/kubernetes/ca.pem \
+  --cloud-provider= \
   --cluster-dns=10.32.0.10 \
   --cluster-domain=cluster.local \
-  --container-runtime=docker \
-  --experimental-bootstrap-kubeconfig=/var/lib/kubelet/bootstrap.kubeconfig \
-  --network-plugin=cni \
+  --container-runtime=remote \
+  --container-runtime-endpoint=unix:///var/run/cri-containerd.sock \
+  --image-pull-progress-deadline=2m \
   --kubeconfig=/var/lib/kubelet/kubeconfig \
-  --serialize-image-pulls=false \
+  --network-plugin=cni \
+  --pod-cidr={{ cidr_blocks['%s_pod_cidr' | format(ansible_nodename)] }} \
   --register-node=true \
-  --tls-cert-file=/var/lib/kubelet/kubernetes.pem \
-  --tls-private-key-file=/var/lib/kubelet/kubernetes-key.pem \
-  --cert-dir=/var/lib/kubelet \
+  --runtime-request-timeout=15m \
+  --tls-cert-file=/var/lib/kubelet/{{ ansible_nodename }}.pem \
+  --tls-private-key-file=/var/lib/kubelet/{{ ansible_nodename }}-key.pem \
   --v=2
 Restart=on-failure
 RestartSec=5

@@ -1,6 +1,7 @@
 ---
 # tasks file for k8s_workers--n
 
+
 - name: Creates /var/run/kubernetes
   file: path=/var/run/{{item}} state=directory
   with_items:
@@ -13,45 +14,67 @@
           - kube-proxy
           - kubernetes
 
+- name: Creates /etc/cni/net.d 
+  file: path=/etc/cni/net.d state=directory
+
+- name: Creates /opt/cni/bin 
+  file: path=/opt/cni/bin state=directory
+
+- name: Download CNI plugins
+  get_url:
+    url: https://github.com/containernetworking/plugins/releases/download/v0.6.0/cni-plugins-amd64-v0.6.0.tgz 
+    dest: /tmp
+
+- name: Extract and Install CNI Plugins
+  unarchive: src=/tmp/cni-plugins-amd64-v0.6.0.tgz dest=/opt/cni/bin/ copy=no
+  mode: 755
+
+- name: Download Containerd CNI
+  get_url:
+    url: https://github.com/kubernetes-incubator/cri-containerd/releases/download/v1.0.0-beta.0/cri-containerd-1.0.0-beta.0.linux-amd64.tar.gz 
+    dest: /tmp
+
+- name: Extract and Install Containerd CNI 
+  unarchive: src=/tmp/cri-containerd-1.0.0-beta.0.linux-amd64.tar.gz dest=/ copy=no
+  mode: 755
+
+- name: Copy the CNI Plugin Bridge
+  template:
+    src: 10-bridge.conf
+    dest: /etc/cni/net.d/
+    
+- name: Copy the CNI Plugin Loopback
+  copy:
+    src: 99-loopback.conf
+    dest: /etc/cni/net.d/
+
+
 - name: Copy kubeconfig files to /var/lib/kubelet
   command: bash -c 'cp {{item}}  /var/lib/kubelet'
   args:
     chdir: /vagrant
   with_items:
-    - bootstrap.kubeconfig
-    - kubernetes.pem
-    - kubernetes-key.pem
+    - "{{ ansible_nodename }}.pem"
+    - "{{ ansible_nodename }}-key.pem"
 
-- name: Copy kubeconfig files to /var/lib/kube-proxy
-  command: bash -c 'cp {{item}}  /var/lib/kube-proxy'
+- name: Copy CA to /var/lib/kubernetes/
+  command: bash -c 'cp ca.pem /var/lib/kubernetes/'
+  args:
+    chdir: /vagrant
+
+- name: Copy kubeconfig files to /var/lib/kubelet/kubeconfig
+  command: bash -c 'cp {{item}}  /var/lib/kubelet/kubeconfig'
+  args:
+    chdir: /vagrant
+  with_items:
+    - "{{ ansible_nodename }}.kubeconfig"
+
+- name: Copy kubeconfig file to /var/lib/kube-proxy/kubeconfig 
+  command: bash -c 'cp {{item}}  /var/lib/kube-proxy/kubeconfig'
   args:
     chdir: /vagrant
   with_items:
     - kube-proxy.kubeconfig
-
-- name: Download ETCD
-  get_url:
-    url: https://get.docker.com/builds/Linux/x86_64/docker-1.12.6.tgz
-    dest: /tmp
-
-- name: Extract and Install Docker
-  unarchive: src=/tmp/docker-1.12.6.tgz dest=/tmp/ copy=no
-  mode: 755
-
-- name: Copy docker files to /usr/bin/
-  command: bash -c 'cp /tmp/docker/* /usr/bin/'
-
-- name: Copying Docker service file
-  template:
-    src: docker.service
-    dest: /etc/systemd/system/
-
-- name: Starts Docker Service
-  systemd:
-    state: started
-    daemon_reload: yes
-    enabled: yes
-    name: docker
 
 - name: Download and Install kube-proxy
   get_url:
@@ -71,17 +94,6 @@
     dest: /usr/bin/kubectl
     mode: 755
 
-- name: Creates CNI /opt/cni
-  file: path=/opt/cni state=directory
-
-- name: Download CNI plugins
-  get_url:
-    url: https://storage.googleapis.com/kubernetes-release/network-plugins/cni-amd64-0799f5732f2a11b329d9e3d51b9c8f2e3759f2ff.tar.gz
-    dest: /tmp
-
-- name: Extract and Install CNI Plugins
-  unarchive: src=/tmp/cni-amd64-0799f5732f2a11b329d9e3d51b9c8f2e3759f2ff.tar.gz dest=/opt/cni copy=no
-  mode: 755
 
 - name: Copying kubelet and kube-proxy Services to systemd
   template:
@@ -90,6 +102,12 @@
   with_items:
     - kubelet
     - kube-proxy
+
+- name: Enable service containerd and ensure it is not masked
+  systemd:
+    name: containerd
+    enabled: yes
+    masked: no
 
 - name: Starts kubelet and kube-proxy Services
   systemd:
