@@ -4,12 +4,10 @@
 $install_python_script = <<SCRIPT
 
 echo "installing python..."
-# install epel-release on centos
-#  sudo  yum -y install epel-release
-  sudo apt update
+  sudo apt-get update
 
 # install python-pip from epel
-  sudo  apt install -y python-pip
+  sudo apt-get install -y python-pip
 
 # Upgrade pip
    sudo pip install --upgrade pip
@@ -21,7 +19,7 @@ SCRIPT
 $install_socat_script = <<SCRIPT
 
 echo 'installing socat...'
-sudo apt install -y socat
+sudo apt-get install -y socat
 
 SCRIPT
 

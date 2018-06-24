@@ -4,8 +4,11 @@
 - name: Creates /var/lib/kubernetes/
   file: path=/var/lib/kubernetes/ state=directory
 
+- name: Creates /etc/kubernetes/config 
+  file: path=/etc/kubernetes/config state=directory
+
 - name: Copy .pem files to /var/lib/kubernetes/
-  command: bash -c 'cp ca.pem ca-key.pem kubernetes-key.pem kubernetes.pem  /var/lib/kubernetes/'
+  command: bash -c 'cp ca.pem ca-key.pem kubernetes-key.pem kubernetes.pem service-account-key.pem service-account.pem /var/lib/kubernetes/'
   args:
     chdir: /vagrant
 

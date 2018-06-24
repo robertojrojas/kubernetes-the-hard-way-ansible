@@ -4,17 +4,21 @@
 - name: Copying ClusterRole file
   copy:
     src: kube_apiserver_to_kubelet_ClusterRole.yml
-    dest: /tmp
+    dest: /vagrant
     mode: 0755
 
 - name: Create the system:kube-apiserver-to-kubelet ClusterRole 
-  command: bash -c 'kubectl apply -f /tmp/kube_apiserver_to_kubelet_ClusterRole.yml'
+  command: bash -c 'kubectl apply --kubeconfig admin.kubeconfig -f kube_apiserver_to_kubelet_ClusterRole.yml'
+  args:
+    chdir: /vagrant
 
 - name: Copying ClusterRoleBinding file
   copy:
     src: kube_apiserver_to_kubelet_ClusterRoleBinding.yml
-    dest: /tmp
+    dest: /vagrant
     mode: 0755
 
 - name: Create the system:kube-apiserver-to-kubelet ClusterRoleBinding 
-  command: bash -c 'kubectl apply -f /tmp/kube_apiserver_to_kubelet_ClusterRoleBinding.yml'
+  command: bash -c 'kubectl apply --kubeconfig admin.kubeconfig -f kube_apiserver_to_kubelet_ClusterRoleBinding.yml'
+  args:
+    chdir: /vagrant
