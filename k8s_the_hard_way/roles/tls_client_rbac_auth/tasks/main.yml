@@ -8,26 +8,26 @@
     mode: 755
 
 
-- name: Generate Worker KubeConfig
+- name: Generate kubelet/Worker KubeConfig
   include_tasks: generate_worker_kubeconfig.yml
   loop:
-     - "{{ k8sv161_w1 }}"
-     - "{{ k8sv161_w2 }}"
+     - "{{ k8s_w1 }}"
+     - "{{ k8s_w2 }}"
 
 
 - name: Set cluster into kube-proxy.kubeconfig 
-  command: bash -c 'kubectl config set-cluster kubernetes-the-hard-way --certificate-authority=ca.pem --embed-certs=true --server=https://{{ k8sv161_lb_ip }}:6443 --kubeconfig=kube-proxy.kubeconfig'
+  command: bash -c 'kubectl config set-cluster kubernetes-the-hard-way --certificate-authority=ca.pem --embed-certs=true --server=https://{{ k8s_lb_ip }}:6443 --kubeconfig=kube-proxy.kubeconfig'
   args:
     chdir: /vagrant
     creates: /vagrant/kube-proxy.kubeconfig
 
 - name: Set credentials into kube-proxy.kubeconfig 
-  command: bash -c 'kubectl config set-credentials kube-proxy --client-certificate=kube-proxy.pem --client-key=kube-proxy-key.pem --embed-certs=true --kubeconfig=kube-proxy.kubeconfig'
+  command: bash -c 'kubectl config set-credentials system:kube-proxy --client-certificate=kube-proxy.pem --client-key=kube-proxy-key.pem --embed-certs=true --kubeconfig=kube-proxy.kubeconfig'
   args:
     chdir: /vagrant
 
 - name: Set context into kube-proxy.kubeconfig 
-  command: bash -c 'kubectl config set-context default --cluster=kubernetes-the-hard-way --user=kube-proxy --kubeconfig=kube-proxy.kubeconfig'
+  command: bash -c 'kubectl config set-context default --cluster=kubernetes-the-hard-way --user=system:kube-proxy --kubeconfig=kube-proxy.kubeconfig'
   args:
     chdir: /vagrant
 
@@ -35,6 +35,73 @@
   command: bash -c 'kubectl config use-context default --kubeconfig=kube-proxy.kubeconfig'
   args:
     chdir: /vagrant
+
+
+- name: Set cluster into kube-controller-manager.kubeconfig 
+  command: bash -c 'kubectl config set-cluster kubernetes-the-hard-way --certificate-authority=ca.pem --embed-certs=true --server=https://127.0.0.1:6443 --kubeconfig=kube-controller-manager.kubeconfig'
+  args:
+    chdir: /vagrant
+    creates: /vagrant/kube-controller-manager.kubeconfig
+
+- name: Set credentials into kube-controller-manager.kubeconfig 
+  command: bash -c 'kubectl config set-credentials system:kube-controller-manager --client-certificate=kube-controller-manager.pem --client-key=kube-controller-manager-key.pem --embed-certs=true --kubeconfig=kube-controller-manager.kubeconfig'
+  args:
+    chdir: /vagrant
+
+- name: Set context into kube-controller-manager.kubeconfig 
+  command: bash -c 'kubectl config set-context default --cluster=kubernetes-the-hard-way --user=system:kube-controller-manager --kubeconfig=kube-controller-manager.kubeconfig'
+  args:
+    chdir: /vagrant
+
+- name: Set use-context into kube-controller-manager.kubeconfig
+  command: bash -c 'kubectl config use-context default --kubeconfig=kube-controller-manager.kubeconfig'
+  args:
+    chdir: /vagrant
+
+
+- name: Set cluster into kube-scheduler.kubeconfig 
+  command: bash -c 'kubectl config set-cluster kubernetes-the-hard-way --certificate-authority=ca.pem --embed-certs=true --server=https://127.0.0.1:6443 --kubeconfig=kube-scheduler.kubeconfig'
+  args:
+    chdir: /vagrant
+    creates: /vagrant/kube-scheduler.kubeconfig
+
+- name: Set credentials into kube-scheduler.kubeconfig 
+  command: bash -c 'kubectl config set-credentials system:kube-scheduler --client-certificate=kube-scheduler.pem --client-key=kube-scheduler-key.pem --embed-certs=true --kubeconfig=kube-scheduler.kubeconfig'
+  args:
+    chdir: /vagrant
+
+- name: Set context into kube-scheduler.kubeconfig 
+  command: bash -c 'kubectl config set-context default --cluster=kubernetes-the-hard-way --user=system:kube-scheduler --kubeconfig=kube-scheduler.kubeconfig'
+  args:
+    chdir: /vagrant
+
+- name: Set use-context into kube-scheduler.kubeconfig
+  command: bash -c 'kubectl config use-context default --kubeconfig=kube-scheduler.kubeconfig'
+  args:
+    chdir: /vagrant
+
+
+- name: Set cluster into admin.kubeconfig 
+  command: bash -c 'kubectl config set-cluster kubernetes-the-hard-way --certificate-authority=ca.pem --embed-certs=true --server=https://127.0.0.1:6443 --kubeconfig=admin.kubeconfig'
+  args:
+    chdir: /vagrant
+    creates: /vagrant/admin.kubeconfig
+
+- name: Set credentials into admin.kubeconfig 
+  command: bash -c 'kubectl config set-credentials admin --client-certificate=admin.pem --client-key=admin-key.pem --embed-certs=true --kubeconfig=admin.kubeconfig'
+  args:
+    chdir: /vagrant
+
+- name: Set context into admin.kubeconfig 
+  command: bash -c 'kubectl config set-context default --cluster=kubernetes-the-hard-way --user=admin --kubeconfig=admin.kubeconfig'
+  args:
+    chdir: /vagrant
+
+- name: Set use-context into admin.kubeconfig
+  command: bash -c 'kubectl config use-context default --kubeconfig=admin.kubeconfig'
+  args:
+    chdir: /vagrant
+
 
 
 - name: Create the Encryption Config File

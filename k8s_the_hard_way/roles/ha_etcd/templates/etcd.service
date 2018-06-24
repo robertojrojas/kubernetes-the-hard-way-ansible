@@ -3,6 +3,7 @@ Description=etcd
 Documentation=https://github.com/coreos
 
 [Service]
+Type=notify
 ExecStart=/usr/bin/etcd \
   --name {{ ansible_nodename }} \
   --cert-file=/etc/etcd/kubernetes.pem \
@@ -15,10 +16,10 @@ ExecStart=/usr/bin/etcd \
   --client-cert-auth \
   --initial-advertise-peer-urls https://{{ ansible_eth1.ipv4.address }}:2380 \
   --listen-peer-urls https://{{ ansible_eth1.ipv4.address }}:2380 \
-  --listen-client-urls https://{{ ansible_eth1.ipv4.address }}:2379,http://127.0.0.1:2379 \
+  --listen-client-urls https://{{ ansible_eth1.ipv4.address }}:2379,https://127.0.0.1:2379 \
   --advertise-client-urls https://{{ ansible_eth1.ipv4.address }}:2379 \
   --initial-cluster-token etcd-cluster-0 \
-  --initial-cluster {{ k8sv161_c1 }}=https://{{ k8sv161_c1_ip }}:2380,{{ k8sv161_c2 }}=https://{{ k8sv161_c2_ip }}:2380 \
+  --initial-cluster {{ k8s_c1 }}=https://{{ k8s_c1_ip }}:2380,{{ k8s_c2 }}=https://{{ k8s_c2_ip }}:2380 \
   --initial-cluster-state new \
   --data-dir=/var/lib/etcd
 Restart=on-failure

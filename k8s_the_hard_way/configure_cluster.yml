@@ -8,9 +8,9 @@
   become: yes
   roles:
     - ha_etcd
-    - ha_k8s_control_plane
+    #- ha_k8s_control_plane
 
-- hosts: main_controller
-  become: yes
-  roles:
-    - enable_kubelet_bootstrap
+#- hosts: main_controller
+#  become: yes
+#  roles:
+#    - enable_kubelet_bootstrap

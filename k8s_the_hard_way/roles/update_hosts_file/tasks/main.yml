@@ -4,8 +4,8 @@
 - name: "Build hosts file"
   lineinfile: dest=/etc/hosts regexp='.*{{ item.host }}$' line="{{ item.ip }} {{item.host}}" state=present
   with_items: 
-    - { host: 'k8sv19-lb', ip: '192.168.44.10' }
-    - { host: 'k8sv19-c1', ip: '192.168.44.11' }
-    - { host: 'k8sv19-c2', ip: '192.168.44.12' }
-    - { host: 'k8sv19-w1', ip: '192.168.44.21' }
-    - { host: 'k8sv19-w2', ip: '192.168.44.22' }
+    - { host: 'k8sbox-lb', ip: '192.168.44.10' }
+    - { host: 'k8sbox-c1', ip: '192.168.44.11' }
+    - { host: 'k8sbox-c2', ip: '192.168.44.12' }
+    - { host: 'k8sbox-w1', ip: '192.168.44.21' }
+    - { host: 'k8sbox-w2', ip: '192.168.44.22' }

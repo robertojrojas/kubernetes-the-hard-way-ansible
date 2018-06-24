@@ -18,8 +18,8 @@
        backend bk_kuard
           mode tcp
           balance roundrobin
-          server kuardw1 {{ k8sv161_w1_ip }}
-          server kuardw2 {{ k8sv161_w2_ip }}
+          server kuardw1 {{ k8s_w1_ip }}
+          server kuardw2 {{ k8s_w2_ip }}
 
 - name: Restarts HAProxy Service
   systemd:

@@ -5,6 +5,5 @@ This tutorial is inspired by the Kelsey Hightower's Kubernetes The Hard Way tuto
 
 ## Run
 
-* vagrant up
-* ./generate_inventory.sh
-* ./run_playbook.sh
+* vagrant plugin install vagrant-sshfs 
+* ./run_all.sh

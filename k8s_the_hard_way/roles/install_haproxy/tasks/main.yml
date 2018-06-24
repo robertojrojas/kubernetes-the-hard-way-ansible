@@ -19,8 +19,8 @@
        backend bk_k8s
           mode tcp
           balance roundrobin
-          server k8sc1 {{ k8sv161_c1_ip }}
-          server k8sc2 {{ k8sv161_c2_ip }}
+          server k8sc1 {{ k8s_c1_ip }}
+          server k8sc2 {{ k8s_c2_ip }}
 
 - name: Enable SELinux HAProxy
   command: bash -c "setsebool -P haproxy_connect_any=1"
