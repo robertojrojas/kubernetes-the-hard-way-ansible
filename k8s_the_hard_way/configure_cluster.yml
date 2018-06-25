@@ -9,6 +9,7 @@
   roles:
     - ha_etcd
     - ha_k8s_control_plane
+    - enable_http_health_checks
 
 - hosts: main_controller
   become: yes

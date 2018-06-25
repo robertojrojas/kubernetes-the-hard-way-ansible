@@ -93,7 +93,7 @@
     mode: 0755
 
 - name: Generate the Kubernetes certificate and private key 
-  command: bash -c 'cfssl gencert -ca=/vagrant/ca.pem -ca-key=/vagrant/ca-key.pem -config=/tmp/ca-config.json -hostname=10.32.0.1,{{ k8s_c1_ip }},{{ k8s_c2_ip }},{{ k8s_lb_ip }},127.0.0.1,kubernetes.default -profile=kubernetes /tmp/kubernetes-csr.json | cfssljson -bare kubernetes'
+  command: bash -c 'cfssl gencert -ca=/vagrant/ca.pem -ca-key=/vagrant/ca-key.pem -config=/tmp/ca-config.json -hostname=10.32.0.1,{{ k8s_c1_ip }},{{ k8s_c2_ip }},{{ k8s_lb }},{{ k8s_lb_ip }},127.0.0.1,kubernetes.default -profile=kubernetes /tmp/kubernetes-csr.json | cfssljson -bare kubernetes'
   args:
     chdir: /vagrant
     creates: /vagrant/kubernetes-key.pem 

@@ -1,0 +1,23 @@
+---
+# tasks file for enable_http_health_checks
+
+- name: install the latest version of nginx
+  package:
+    name: nginx 
+    state: latest
+
+- name: Copying nginx config file
+  copy:
+    src: kubernetes.default.svc.cluster.local 
+    dest: /etc/nginx/sites-available 
+
+- name: Link Nginx Config file
+  command: bash -c "ln -s /etc/nginx/sites-available/kubernetes.default.svc.cluster.local /etc/nginx/sites-enabled/"
+
+- name: Restarts NGINX Service
+  systemd:
+    state: restarted
+    daemon_reload: yes
+    enabled: yes
+    name: nginx
+
