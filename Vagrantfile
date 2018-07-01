@@ -19,7 +19,7 @@ SCRIPT
 $install_socat_script = <<SCRIPT
 
 echo 'installing socat...'
-sudo apt-get install -y socat
+sudo apt-get install -y socat conntrack ipset 
 
 SCRIPT
 
